@@ -1,0 +1,215 @@
+# 🚀 Trend Agent – AI-Powered Trend Detection System
+
+## 📌 Overview
+
+Trend Agent is a backend system that automatically:
+
+* Fetches videos based on a topic
+* Clusters them into meaningful trends
+* Scores and ranks trends
+* Stores results in a centralized database
+* Enables other agents (Script, Branding, etc.) to reuse data via `trend_id`
+
+---
+
+## 🧠 System Architecture
+
+```
+Ingestion → Clustering → Scoring → Ranking → DB Storage → API Response
+```
+
+### Data Flow
+
+1. Fetch videos from source (YouTube)
+2. Extract keywords and cluster videos
+3. Generate trend scores
+4. Rank top trends
+5. Store in DB:
+
+   * `trend`
+   * `video_db`
+   * `video_trend_map`
+6. Return API response with `trend_id`
+
+---
+
+## 🗂️ Project Structure
+
+```
+
+---
+
+## ⚙️ Setup Instructions
+
+### 1. Clone the repository
+
+```bash
+git clone <your-repo-url>
+cd trend_agent
+```
+
+---
+
+### 2. Create virtual environment
+
+```bash
+python -m venv .venv
+```
+
+Activate:
+
+```bash
+.\.venv\Scripts\activate   # Windows
+```
+
+---
+
+### 3. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+### 4. Setup environment variables
+
+Create `.env` file:
+
+```env
+MONGO_URI=your_mongodb_connection_string
+```
+
+---
+
+## 🛢️ Database Structure
+
+### 1. `trend` collection
+
+```json
+{
+  "trend_id": "uuid",
+  "name": "gta funny moments",
+  "category": "gaming",
+  "viral_score": 92.3
+}
+```
+
+---
+
+### 2. `video_db` collection
+
+```json
+{
+  "video_id": "abc123",
+  "creator_id": "channel_456",
+  "title": "...",
+  "url": "...",
+  "views": 1000
+}
+```
+
+---
+
+### 3. `video_trend_map` collection
+
+```json
+{
+  "id": "uuid",
+  "trend_id": "uuid",
+  "video_id": "abc123"
+}
+```
+
+---
+
+## ▶️ Running the Server
+
+```bash
+uvicorn main:app --reload
+```
+
+---
+
+## 🌐 API Endpoint
+
+### Get Trends
+
+```http
+GET /trends/{topic}
+```
+
+### Example
+
+```
+http://127.0.0.1:8000/trends/gaming
+```
+
+---
+
+## 📤 Sample Response
+
+```json
+{
+  "creator_niche": "gaming",
+  "top_trends": [
+    {
+      "trend_id": "uuid",
+      "rank": 1,
+      "name": "gta funny moments",
+      "viral_score": 92.3
+    }
+  ]
+}
+```
+
+---
+
+## 🔗 How Mapping Works
+
+* Each trend gets a `trend_id`
+* Each video is stored in `video_db`
+* Mapping is stored in `video_trend_map`
+
+```
+trend_id → video_trend_map → video_db
+```
+
+This allows other agents to fetch videos using only `trend_id`.
+
+---
+
+## 🧪 Testing
+
+Check DB connection:
+
+```bash
+python -c "from db.mongo import db; print(db.list_collection_names())"
+```
+
+---
+
+## 🚀 Future Improvements
+
+* AI-based clustering (embeddings)
+* Multi-platform support (Instagram, Twitter)
+* Trend lifecycle prediction
+* Script generation agent
+* Real-time trend tracking
+
+---
+
+## 🧠 Key Insight
+
+```
+trend_id = communication layer between agents
+database = shared memory of the system
+```
+
+---
+
+## 👩‍💻 Author
+
+Built as part of an AI multi-agent system for trend detection and content generation.
+
+---
