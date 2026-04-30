@@ -12,10 +12,15 @@ app = FastAPI()
 def home():
     return {"message": "Trend Agent Running"}
 
-@app.get("/trends/{topic}")
-def get_trends(topic: str):
+from fastapi import Query
 
-    videos = fetch_videos(topic)
+@app.get("/trends")
+def get_trends(
+    topic: str = Query(...),
+    creator_url: str = Query(None)
+):
+
+    videos = fetch_videos(topic,creator_url)
     print("VIDEOS COUNT:", len(videos))
     clusters = cluster_videos(videos)
     print("CLUSTERS COUNT:", len(clusters))
