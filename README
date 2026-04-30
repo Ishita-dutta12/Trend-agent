@@ -4,7 +4,7 @@
 
 Trend Agent is a backend system that automatically:
 
-* Fetches videos based on a topic
+* Fetches videos based on a topic and creator url.
 * Clusters them into meaningful trends
 * Scores and ranks trends
 * Stores results in a centralized database
